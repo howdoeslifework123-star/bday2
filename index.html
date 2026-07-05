@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abigailien</title>
+    <style>
+        /* --- Reset & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcf8f2;
+            color: #333;
+            overflow-x: hidden;
+            transition: background 0.5s ease; /* Smooth transition for global body fallback */
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: white;
+            padding: 20px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 600px;
+        }
+
+        /* --- Intro Section --- */
+        .intro {
+            padding: 100px 20px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+        .intro h2 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        .intro p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* --- MAGIC SCROLL CONTAINER --- */
+        /* This container acts as the viewport frame for the background swapping */
+        .scroll-bg-container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* The fixed background layer that will change images */
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Sits behind the text content */
+            opacity: 0;  /* Hidden by default, activated via JS class */
+            transition: background-image 0.8s ease-in-out, opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Triggered via JS when the user enters the scroll section */
+        .fixed-bg.active {
+            opacity: 1;
+        }
+
+        /* Content panels that scroll over the fixed background */
+        .scroll-panel {
+            height: 100vh; /* Each story/image chunk takes full screen height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        /* Glassmorphism box to make text readable over any background image */
+        .panel-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .panel-content h3 {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        .panel-content p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2; /* Ensures it covers the fixed background */
+        }
+
+        /* Simple Keyframe Animation */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>Happy Birthday, Noot! 🎂</h1>
+        <p>Don't Die... just dont :p</p>
+    </section>
+
+    <section class="intro">
+        <h2>Abigail</h2>
+        <p>No matter what happens... I Love You.</p>
+    </section>
+
+    <div id="fixed-bg-layer" class="fixed-bg"></div>
+
+    <div class="scroll-bg-container">
+        <div class="scroll-panel" data-bg="a-cook-preparing-a-penguin-for-dinner-antarctic-expedition-v0-2u9wfbmgkfkd1.jpg">
+            <div class="panel-content">
+                <h3>A Penguin a day, keeps stoopidity away!</h3>
+                <p>Remember to always eat noot noots for your birthday. They're delicious and I promise it's not evil...</p>
+            </div>
+        </div>
+
+        <div class="scroll-panel" data-bg="3d-rendering-cute-grey-alien-260nw-677170918.jpg">
+            <div class="panel-content">
+                <h3>This was you before you decided to turn hooman.</h3>
+                <p>No matter what form you take, you will always be the most beautiful person I know, fr.</p>
+            </div>
+        </div>
+
+        <div class="scroll-panel" data-bg="SPOILER_IMG_20250101_003326.jpg">
+            <div class="panel-content">
+                <h3>Here's an image of your eyes</h3>
+                <p>'Cus you won't believe me when I say that you're perfect, see for yourself then. Blindbigail.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Thank you for existing, so stop dying and start respawning -.-</p>
+    </footer>
+
+    <script>
+        // Grab elements from the DOM
+        const fixedBg = document.getElementById('fixed-bg-layer');
+        const panels = document.querySelectorAll('.scroll-panel');
+
+        // Create an Intersection Observer to detect which panel is in view
+        const observerOptions = {
+            root: null, // uses viewport
+            rootMargin: '0px',
+            threshold: 0.5 // Triggers when 50% of the target panel is visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 1. Activate the background layer visibility
+                    fixedBg.classList.add('active');
+                    
+                    // 2. Fetch the custom image URL attached to the current panel
+                    const newBgImage = entry.target.getAttribute('data-bg');
+                    
+                    // 3. Smoothly switch the background image
+                    fixedBg.style.backgroundImage = `url('${newBgImage}')`;
+                }
+            });
+        }, observerOptions);
+
+        // Attach the observer to every panel chunk
+        panels.forEach(panel => {
+            observer.observe(panel);
+        });
+
+        // Optional: Turn off the fixed background if the user scrolls completely away from the story container
+        window.addEventListener('scroll', () => {
+            const container = document.querySelector('.scroll-bg-container');
+            const rect = container.getBoundingClientRect();
+            
+            // If the user has scrolled past or above the scroll section, fade out the background
+            if (rect.bottom < 0 || rect.top > window.innerHeight) {
+                fixedBg.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
